@@ -1,0 +1,15 @@
+{
+	"marathon-lb": {
+		"name": "marathon-lb-external",
+		"instances": 1,
+		"constraints": [
+			[
+				"hostname",
+				"LIKE",
+				"external"
+			]
+		],
+		"cpus": 1,
+		"mem": 512
+	}
+}

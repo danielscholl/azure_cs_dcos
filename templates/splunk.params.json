@@ -1,0 +1,84 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "templateLocation": {
+      "value": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/splunk-on-ubuntu"
+    },
+    "location": {
+      "value": "Central US"
+    },
+    "deploymentType": {
+      "value": "Standalone"
+    },
+    "standaloneVmSize": {
+      "value": "Standard_D3_v2"
+    },
+    "clusterMasterVmSize": {
+      "value": "Standard_D3_v2"
+    },
+    "clusterSearchheadVmSize": {
+      "value": "Standard_D4_v2"
+    },
+    "clusterIndexerVmSize": {
+      "value": "Standard_D3"
+    },
+    "clusterIndexerVmCount": {
+      "value": 3
+    },
+    "domainNamePrefix": {
+      "value": "dcos-splunk"
+    },
+    "virtualNetworkName": {
+      "value": "dcos-vnet-7DB8184"
+    },
+    "virtualNetworkNewOrExisting": {
+      "value": "existing"
+    },
+    "virtualNetworkExistingRGName": {
+      "value": "DCOS"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "adminUsername": {
+      "value": "devops"
+    },
+    "adminPassword": {
+      "value": "Manage1!"
+    },
+    "splunkAdminPassword": {
+      "value": "Manage1!"
+    },
+    "subnet1Name": {
+      "value": "dcos-masterSubnet"
+    },
+    "subnet2Name": {
+      "value": "dcos-agentPrivateSubnet"
+    },
+    "virtualNetworkAddressPrefix": {
+      "value": "172.16.0.0/24"
+    },
+    "subnet1Prefix": {
+      "value": "172.16.0.0/24"
+    },
+    "subnet2Prefix": {
+      "value": "10.32.0.0/11"
+    },
+    "subnet1StartAddress": {
+      "value": "172.16.0.100"
+    },
+    "subnet2StartAddress": {
+      "value": "10.32.0.100"
+    },
+    "sshFrom": {
+      "value": "0.0.0.0/0"
+    },
+    "forwardedDataFrom": {
+      "value": "0.0.0.0/0"
+    },
+    "publicIPName": {
+      "value": "splunkls-publicip"
+    }
+  }
+}
