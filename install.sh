@@ -30,6 +30,12 @@ if [ "$RESULT"  == "" ]
       --location ${AZURE_LOCATION} \
       --sku Standard_LRS \
       --kind storage
+
+    ConectionString=$(az storage account show-connection-string -g ${AZURE_RESOURCE_GROUP} -n ${AZURE_STORAGE_ACCOUNT})
+    export AZURE_STORAGE_CONNECTION_STRING="$ConnectionString"
+    az storage share create \
+      --name appshare
+
 	else
 		echo "Storage account ${AZURE_STORAGE_ACCOUNT} already exists."
 	fi
