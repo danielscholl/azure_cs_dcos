@@ -1,0 +1,35 @@
+{
+    "id": "/db/mongo/mongo-cluster-init",
+    "mem": 1024,
+    "cpus": 0.5,
+    "instances": 1,
+    "cmd": "/init-cluster.sh",
+    "dependencies": [
+        "/db/mongo/mongo1",
+        "/db/mongo/mongo2",
+        "/db/mongo/mongo3"
+    ],
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "marathon-lb-internal.marathon.mesos:10000/mongo:latest",
+            "network": "BRIDGE",
+            "portMappings": [
+                {
+                    "hostPort": 0,
+                    "servicePort": 0,
+                    "containerPort": 0,
+                    "protocol": "tcp"
+                }
+            ],
+            "forcePullImage": true
+        }
+    },
+    "env": {
+        "NODE_COUNT": "3",
+        "MASTER": "mongo1-mongo-db.marathon.mesos",
+        "NODE2": "mongo2-mongo-db.marathon.mesos",
+        "NODE3": "mongo3-mongo-db.marathon.mesos",
+        "STARTUP_DELAY": "5"
+    }
+}

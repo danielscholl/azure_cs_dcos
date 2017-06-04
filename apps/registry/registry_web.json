@@ -1,0 +1,44 @@
+{
+  "id": "registry-ui",
+  "cpus": 0.5,
+  "mem": 1024,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "konradkleine/docker-registry-frontend:v2",
+      "privileged": false,
+      "forcePullImage": true,
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 0,
+          "servicePort": 10001,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "env": {
+    "ENV_DOCKER_REGISTRY_PORT": "10000",
+    "ENV_DOCKER_REGISTRY_HOST": "marathon-lb-internal.marathon.mesos"
+  },
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_0_VHOST": "<FQDN>",
+    "HAPROXY_0_MODE":"http"
+  },
+  "healthChecks": [
+    {
+      "path": "/",
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 3,
+      "ignoreHttp1xx": false
+    }
+  ]
+}

@@ -5,10 +5,10 @@ yarn-error.log
 .env.sh
 .ssh
 inventory
-tools/*list
-/apps
+params.json
+pb.jumpserver.retry
 .DS_Store
 .vscode/
 
 
-params.json
+
