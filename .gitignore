@@ -10,4 +10,4 @@ tools/*list
 .vscode/
 
 
-templates/params.json
+params.json
