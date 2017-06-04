@@ -4,6 +4,7 @@ yarn-error.log
 .env
 .env.sh
 .ssh
+inventory
 tools/*list
 /apps
 .DS_Store

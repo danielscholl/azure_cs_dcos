@@ -1,0 +1,6 @@
+---
+- hosts: agents
+  vars:
+    property: value
+  roles:
+    - agents

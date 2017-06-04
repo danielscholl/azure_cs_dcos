@@ -1,0 +1,55 @@
+---
+- name: Update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Install System Packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - ansible
+
+- name: Update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Download DCOS CLI
+  become: yes
+  get_url:
+    url: https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.8/dcos
+    dest: /usr/local/bin
+    mode: 0755
+
+- name: Configure DCOS
+  shell: /usr/local/bin/dcos config set core.dcos_url http://localhost
+
+- name: Setup Ansible
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'roles/masters', dest: '~/roles' }
+    - { src: 'roles/agents', dest: '~/roles' }
+    - { src: 'ansible.acs.cfg', dest: '~/ansible.cfg' }
+    - { src: 'pb.masters.yml', dest: '~/master.yml' }
+    - { src: 'pb.agents.yml', dest: '~/agent.yml' }
+
+- name: Generate Ansible Inventory
+  shell: |
+    echo '[masters]' > inventory
+    dig master.mesos +short >> inventory
+    echo '[agents]' >> inventory
+    dcos node | awk '{print $2}' | tail -n +2 >> inventory
+
+- name: Copy SSH Keys
+  copy: src={{ item.src }} dest={{ item.dest }} mode=0600
+  with_items:
+    - { src: '.ssh', dest: '~' }
+
+- name: Upgrade Scale Set
+  shell: |
+    ansible-playbook master.yml
+    ansible-playbook agent.yml
+
+- name: Copy Apps
+  copy: src={{ item.src }} dest={{ item.dest }} mode=0700
+  with_items:
+    - { src: 'apps', dest: '~' }

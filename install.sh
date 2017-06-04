@@ -3,16 +3,7 @@
 
 ENV_SETUP=".env.sh"
 source "$ENV_SETUP"
-
-# if [ ! -d "tmp" ]; then
-#   mkdir tmp
-# fi
-# if [ ! -d "apps" ]; then
-#   mkdir apps
-#   cp tools/apps/registry_sample.json apps/registry.json
-#   cp tools/app/test_web_app.json app/test_web.json
-#   cp tools/app/vendor_db_cassandra_group.json app/vendor_db_cassandra.json
-# fi
+INVENTORY_FILE="inventory"
 
 #az login
 az account set \
@@ -65,26 +56,21 @@ if [ "$RESULT"  == "" ]
 		az group deployment create \
       --name Template.Deploy.${AZURE_RESOURCE_GROUP} \
       --resource-group ${AZURE_RESOURCE_GROUP} \
-      --template-file templates/acs_dcos.json \
+      --template-file deploy.json \
       --parameters @params.json
 	else
 		echo "Mesos Cluster ${AZURE_RESOURCE_GROUP} already exists."
 	fi
 
-# Create the agentlist file
-if [ -f tools/agentlist ]; then
-    rm tools/agentlist
-fi
-if [ -f tools/masterlist ]; then
-    rm tools/masterlist
-fi
+#Create the Inventory file
+if [ ! -f ${INVENTORY_FILE} ]
+  then
+    tput setaf 1; echo 'Creating the ansible inventory file...' ; tput sgr0
+    echo "[jumpbox]" > ${INVENTORY_FILE}
+    echo ${MASTER_FQDN} >> ${INVENTORY_FILE}
+  else
+    echo "Inventory File Already exists"
+  fi
 
-if command -v dcos > /dev/null 2>&1; then
-  echo "dcos is available"
-else
-  echo "dcos is not available"
-fi
-
-tput setaf 1; echo 'Creating the agentlist file...' ; tput sgr0
-dcos node | awk '{print $2}' | tail -n +2 > tools/agentlist
-ssh -p 2200 -i ./.ssh/id_rsa $USER@$MASTER0_FQDN  "dig master.mesos +short" > tools/masterlist
+# Provision the JumpBox
+ansible-playbook -i ${INVENTORY_FILE} pb.jumpserver.yml

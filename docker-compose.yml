@@ -1,0 +1,6 @@
+version: '2'
+services:
+  registry-web:
+    image: azurecr/web-manager
+    ports:
+      - "5001:80"
