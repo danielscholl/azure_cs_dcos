@@ -8,6 +8,7 @@
   apt: pkg={{ item }} state=latest
   with_items:
     - ansible
+    - cifs-utils
 
 - name: Update apt
   become: yes
