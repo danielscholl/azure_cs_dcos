@@ -1,4 +1,8 @@
 ---
-- name: Update apt
+- name: Update and Upgrade apt packages
   become: yes
-  apt: update_cache=yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+

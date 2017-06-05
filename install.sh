@@ -68,15 +68,8 @@ if [ "$RESULT"  == "" ]
 		echo "Mesos Cluster ${AZURE_RESOURCE_GROUP} already exists."
 	fi
 
-#Create the Inventory file
-if [ ! -f ${INVENTORY_FILE} ]
-  then
-    tput setaf 1; echo 'Creating the ansible inventory file...' ; tput sgr0
-    echo "[jumpbox]" > ${INVENTORY_FILE}
-    echo ${MASTER_FQDN} >> ${INVENTORY_FILE}
-  else
-    echo "Inventory File Already exists"
-  fi
-
 # Provision the JumpBox
+tput setaf 1; echo 'Creating the ansible inventory file...' ; tput sgr0
+echo "[jumpbox]" > ${INVENTORY_FILE}
+echo ${MASTER_FQDN} >> ${INVENTORY_FILE}
 ansible-playbook -i ${INVENTORY_FILE} pb.jumpserver.yml

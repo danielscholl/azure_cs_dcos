@@ -1,18 +1,17 @@
 ---
-- name: Update apt
+- name: Update and Upgrade apt packages
   become: yes
-  apt: update_cache=yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install System Packages
   become: yes
-  apt: pkg={{ item }} state=latest
+  apt: pkg={{ item }} state=latest update_cache=yes
   with_items:
     - ansible
     - cifs-utils
-
-- name: Update apt
-  become: yes
-  apt: update_cache=yes
 
 - name: Download DCOS CLI
   become: yes
@@ -45,10 +44,11 @@
   with_items:
     - { src: '.ssh', dest: '~' }
 
-- name: Upgrade Scale Set
-  shell: |
-    ansible-playbook master.yml
-    ansible-playbook agent.yml
+- name: Upgrade Cluster Masters System Packages
+  shell: ansible-playbook master.yml
+
+- name: Upgrade Cluster Agents System Packages
+  shell: ansible-playbook agent.yml
 
 - name: Copy Apps
   copy: src={{ item.src }} dest={{ item.dest }} mode=0700
